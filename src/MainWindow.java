@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
 
 /**
  * Created by Jason on 2015/10/27.
@@ -8,9 +9,11 @@ public class MainWindow {
     private JPanel contentPane;
     private JLabel labelMain;
 
-    private int pressedKey;
+    private ArrayList<Integer> pressedKey;
 
     public MainWindow() {
+        pressedKey = new ArrayList<>();
+
         contentPane.setFocusable(true);
         contentPane.addKeyListener(new KeyAdapter() {
             @Override
@@ -19,8 +22,22 @@ public class MainWindow {
 
                 int key = getDirection(e); // Get direction of pressed key
                 if (key == -1) return; // Ignore invalid key
-                pressedKey = key; // Log current pressing key
-                labelMain.setText(Integer.toString(pressedKey));
+                pressedKey.add(key); // Log current pressing key
+                labelMain.setText(Integer.toString(pressedKey.get(0)));
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+
+                int key = getDirection(e); // Get direction of released key
+                if (key == -1) return; // Ignore invalid key
+                pressedKey.removeIf(x -> x == key); // Remove released key from list
+
+                if (pressedKey.size() != 0)
+                    labelMain.setText(Integer.toString(pressedKey.get(0)));
+                else
+                    labelMain.setText("QQ");
             }
         });
     }
