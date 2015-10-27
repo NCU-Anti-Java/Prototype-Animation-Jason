@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.Timer;
 
 /**
  * Created by Jason on 2015/10/27.
@@ -8,6 +9,7 @@ import java.util.*;
 public class MainWindow {
     private JPanel contentPane;
     private JLabel labelMain;
+    private int frame;
 
     private ArrayList<Integer> pressedKey;
 
@@ -23,7 +25,7 @@ public class MainWindow {
                 int key = getDirection(e); // Get direction of pressed key
                 if (key == -1) return; // Ignore invalid key
                 pressedKey.add(key); // Log current pressing key
-                labelMain.setText(Integer.toString(pressedKey.get(0)));
+                frame = 0; // Reset frame no. for changing direction
             }
 
             @Override
@@ -33,13 +35,23 @@ public class MainWindow {
                 int key = getDirection(e); // Get direction of released key
                 if (key == -1) return; // Ignore invalid key
                 pressedKey.removeIf(x -> x == key); // Remove released key from list
-
-                if (pressedKey.size() != 0)
-                    labelMain.setText(Integer.toString(pressedKey.get(0)));
-                else
-                    labelMain.setText("QQ");
             }
         });
+
+        // Timer for animation
+        Timer timer = new Timer(200, e -> {
+            if (pressedKey.size() != 0) {
+                // Increase frame no.
+                frame++;
+                if (frame >= 8) frame = 0;
+
+                labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
+            }else {
+                frame = 0; // Reset frame no. for standing animation
+                labelMain.setText(Integer.toString(frame));
+            }
+        });
+        timer.start();
     }
 
     private int getDirection(KeyEvent e) {
