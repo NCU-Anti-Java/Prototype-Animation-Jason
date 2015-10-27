@@ -11,10 +11,13 @@ public class MainWindow {
     private JLabel labelMain;
     private int frame;
     private int lastState;
+    private ImageIcon[][] img;
 
     private ArrayList<Integer> pressedKey;
 
     public MainWindow() {
+        LoadImage();
+
         pressedKey = new ArrayList<>();
 
         contentPane.setFocusable(true);
@@ -46,8 +49,15 @@ public class MainWindow {
         });
 
         // Timer for animation
-        Timer timer = new Timer(200, e -> draw());
+        Timer timer = new Timer(100, e -> draw());
         timer.start();
+    }
+
+    private void LoadImage(){
+        img = new ImageIcon[4][8];
+        for (int i = 0; i <= 3; i++)
+            for (int j = 0; j <= 7; j++)
+                img[i][j] = new ImageIcon("image/" + Integer.toString(i) + "_" + Integer.toString(j) + ".gif");
     }
 
     private void draw() {
@@ -57,9 +67,9 @@ public class MainWindow {
             frame++;
             if (frame >= 8) frame = 0;
 
-            labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
+            labelMain.setIcon(img[pressedKey.get(0)][frame]);
         } else {
-            labelMain.setText(Integer.toString(lastState) + "_" + Integer.toString(frame));
+            labelMain.setIcon(img[lastState][frame]);
         }
     }
 
