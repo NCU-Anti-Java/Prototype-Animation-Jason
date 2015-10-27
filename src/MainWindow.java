@@ -22,6 +22,7 @@ public class MainWindow {
         pressedKey = new ArrayList<>();
 
         contentPane.setFocusable(true);
+        contentPane.enableInputMethods(false); // Disable IME
         contentPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
