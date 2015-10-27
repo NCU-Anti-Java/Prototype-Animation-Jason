@@ -25,7 +25,6 @@ public class MainWindow {
                 int key = getDirection(e); // Get direction of pressed key
                 if (key == -1) return; // Ignore invalid key
                 pressedKey.add(key); // Log current pressing key
-                frame = 0; // Reset frame no. for changing direction
             }
 
             @Override
@@ -34,6 +33,11 @@ public class MainWindow {
 
                 int key = getDirection(e); // Get direction of released key
                 if (key == -1) return; // Ignore invalid key
+
+                // If key of current direction is released, direction will be changed
+                if (pressedKey.get(0) == key)
+                    frame = 0; // Reset frame no. for changing to a new direction
+
                 pressedKey.removeIf(x -> x == key); // Remove released key from list
             }
         });
@@ -51,8 +55,7 @@ public class MainWindow {
             if (frame >= 8) frame = 0;
 
             labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
-        }else {
-            frame = 0; // Reset frame no. for standing animation
+        } else {
             labelMain.setText(Integer.toString(frame));
         }
     }
