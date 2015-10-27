@@ -14,6 +14,7 @@ public class MainWindow {
     private ImageIcon[][] img;
 
     private ArrayList<Integer> pressedKey;
+    private boolean spacePressed;
 
     public MainWindow() {
         LoadImage();
@@ -28,7 +29,11 @@ public class MainWindow {
 
                 int key = getDirection(e); // Get direction of pressed key
                 if (key == -1) return; // Ignore invalid key
-                pressedKey.add(key); // Log current pressing key
+
+                if (key != 4)
+                    pressedKey.add(key); // Log current pressing key
+                else
+                    spacePressed = true; // Space key is pressed (should not be added into list)
             }
 
             @Override
@@ -37,6 +42,11 @@ public class MainWindow {
 
                 int key = getDirection(e); // Get direction of released key
                 if (key == -1) return; // Ignore invalid key
+
+                if (key == 4) { // Handle space key released
+                    spacePressed = false; // Just reset spacePressed
+                    return;
+                }
 
                 // If key of current direction is released, direction will be changed
                 if (pressedKey.get(0) == key) {
@@ -67,6 +77,7 @@ public class MainWindow {
             frame++;
             if (frame >= 8) frame = 0;
 
+            if (spacePressed) frame = 0; // Space key is pressed! Freeze!
             labelMain.setIcon(img[pressedKey.get(0)][frame]);
         } else {
             labelMain.setIcon(img[lastState][frame]);
@@ -76,9 +87,10 @@ public class MainWindow {
     private int getDirection(KeyEvent e) {
         // Return direction of pressed key in number
 
-        // Left: 37. Up: 38. Right: 39. Down: 40.
-        // Remapped to: Left: 0. Up: 1. Right: 2. Down: 3.
+        // Left: 37. Up: 38. Right: 39. Down: 40. Space: 32
+        // Remapped to: Left: 0. Up: 1. Right: 2. Down: 3. Space: 4
         int code = e.getKeyCode();
+        if (code == 32) return 4;
         return (code >= 37 && code <= 40) ? code - 37 : -1;
     }
 
