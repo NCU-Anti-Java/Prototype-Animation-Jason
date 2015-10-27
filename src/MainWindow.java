@@ -39,19 +39,22 @@ public class MainWindow {
         });
 
         // Timer for animation
-        Timer timer = new Timer(200, e -> {
-            if (pressedKey.size() != 0) {
-                // Increase frame no.
-                frame++;
-                if (frame >= 8) frame = 0;
-
-                labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
-            }else {
-                frame = 0; // Reset frame no. for standing animation
-                labelMain.setText(Integer.toString(frame));
-            }
-        });
+        Timer timer = new Timer(200, e -> draw());
         timer.start();
+    }
+
+    private void draw() {
+        // Handle animation
+        if (pressedKey.size() != 0) {
+            // Increase frame no.
+            frame++;
+            if (frame >= 8) frame = 0;
+
+            labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
+        }else {
+            frame = 0; // Reset frame no. for standing animation
+            labelMain.setText(Integer.toString(frame));
+        }
     }
 
     private int getDirection(KeyEvent e) {
