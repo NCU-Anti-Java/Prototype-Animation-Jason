@@ -10,6 +10,7 @@ public class MainWindow {
     private JPanel contentPane;
     private JLabel labelMain;
     private int frame;
+    private int lastState;
 
     private ArrayList<Integer> pressedKey;
 
@@ -35,8 +36,10 @@ public class MainWindow {
                 if (key == -1) return; // Ignore invalid key
 
                 // If key of current direction is released, direction will be changed
-                if (pressedKey.get(0) == key)
+                if (pressedKey.get(0) == key) {
                     frame = 0; // Reset frame no. for changing to a new direction
+                    lastState = key; // Keep direction before changing direction
+                }
 
                 pressedKey.removeIf(x -> x == key); // Remove released key from list
             }
@@ -56,7 +59,7 @@ public class MainWindow {
 
             labelMain.setText(Integer.toString(pressedKey.get(0)) + "_" + Integer.toString(frame));
         } else {
-            labelMain.setText(Integer.toString(frame));
+            labelMain.setText(Integer.toString(lastState) + "_" + Integer.toString(frame));
         }
     }
 
