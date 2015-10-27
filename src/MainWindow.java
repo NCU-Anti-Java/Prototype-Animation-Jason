@@ -8,28 +8,30 @@ public class MainWindow {
     private JPanel contentPane;
     private JLabel labelMain;
 
+    private int pressedKey;
+
     public MainWindow() {
         contentPane.setFocusable(true);
         contentPane.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-                switch(e.getKeyCode()){
-                    case 37:
-                        labelMain.setText("Left");
-                        break;
-                    case 38:
-                        labelMain.setText("Up");
-                        break;
-                    case 39:
-                        labelMain.setText("Right");
-                        break;
-                    case 40:
-                        labelMain.setText("Down");
-                        break;
-                }
+
+                int key = getDirection(e); // Get direction of pressed key
+                if (key == -1) return; // Ignore invalid key
+                pressedKey = key; // Log current pressing key
+                labelMain.setText(Integer.toString(pressedKey));
             }
         });
+    }
+
+    private int getDirection(KeyEvent e) {
+        // Return direction of pressed key in number
+
+        // Left: 37. Up: 38. Right: 39. Down: 40.
+        // Remapped to: Left: 0. Up: 1. Right: 2. Down: 3.
+        int code = e.getKeyCode();
+        return (code >= 37 && code <= 40) ? code - 37 : -1;
     }
 
     public static void main(String[] args) {
